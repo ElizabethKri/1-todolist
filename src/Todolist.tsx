@@ -24,7 +24,7 @@ export function Todolist ({title, tasks}: TodolistPropsType) {
                 <h3>{title}</h3>
                 <div>
                     <input/>
-                    <Button title={'+'}/>
+                    <Button title={' + '}/>
                 </div>
                 <ul>
                     {taskElements}
