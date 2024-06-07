@@ -1,7 +1,5 @@
-//cтрелочная функция
-// const Todolist = () => {}
-
 import {TaskType} from "./types/common";
+import {Button} from "./Button";
 
 type TodolistPropsType = {
     title: string
@@ -26,15 +24,15 @@ export function Todolist ({title, tasks}: TodolistPropsType) {
                 <h3>{title}</h3>
                 <div>
                     <input/>
-                    <button>+</button>
+                    <Button title={'+'}/>
                 </div>
                 <ul>
                     {taskElements}
                 </ul>
                 <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
+                    <Button title={'All'}/>
+                    <Button title={'Active'}/>
+                    <Button title={'Completed'}/>
                 </div>
             </div>
         </div>
