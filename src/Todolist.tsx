@@ -1,27 +1,30 @@
-import {TaskType} from "./types/common";
+import {TaskType} from './types/common';
+import {nameBtnFiltered} from './App';
 
 
 type TodolistPropsType = {
     title: string
-    removeTask: (idTask: number) => void
     tasks: Array<TaskType>
+    removeTask: (idTask: number) => void
+    filteredTask: (nameBtn: nameBtnFiltered) => void
+
 }
 
 //регулярная функция
-export function Todolist ({title, tasks, removeTask}: TodolistPropsType) {
+export function Todolist({title, tasks, removeTask, filteredTask}: TodolistPropsType) {
 
     const taskElements: Array<JSX.Element> | JSX.Element =
-    tasks.length !== 0
-    ? tasks.map( task => {
-        return (
-            <li>
-                <input type="checkbox" checked={task.isDone}/>
-                <span>{task.title}</span>
-                <button onClick={() => removeTask(task.id)} style={{marginLeft : "5px"}}>-</button>
-            </li>
-        )
-    })
-    : <span>Your taskslist is empty </span>
+        tasks.length !== 0
+            ? tasks.map (task => {
+                return (
+                    <li key={task.id}>
+                        <input type="checkbox" checked={task.isDone}/>
+                        <span>{task.title}</span>
+                        <button onClick={() => removeTask (task.id)} style={{marginLeft: '5px'}}>-</button>
+                    </li>
+                )
+            })
+            : <span>Your taskslist is empty </span>
 
     return (
         <div className="todolist">
@@ -31,11 +34,11 @@ export function Todolist ({title, tasks, removeTask}: TodolistPropsType) {
                     <input/>
                     <button>+</button>
                 </div>
-                    <span>{taskElements}</span>
+                <span>{taskElements}</span>
                 <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
+                    <button onClick={() => filteredTask ('All')}>All</button>
+                    <button onClick={() => filteredTask ('Active')}> Active</button>
+                    <button onClick={() => filteredTask ('Completed')}>Completed</button>
                 </div>
             </div>
         </div>
