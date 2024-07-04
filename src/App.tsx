@@ -2,6 +2,7 @@ import React, {useMemo, useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {TaskType} from './types/common';
+import {v1} from 'uuid';
 
 export type nameBtnFiltered = 'All' | 'Active' | 'Completed'
 
@@ -10,12 +11,13 @@ function App() {
     const todolistTitle = 'What to learn'
     const [tasks, setTasks] = useState<TaskType[]> (
         [
-            {id: 1, title: 'HTML', isDone: true},
-            {id: 2, title: 'CSS', isDone: true},
-            {id: 3, title: 'TS/JS', isDone: false},
-            {id: 4, title: 'REACT', isDone: false},
+            {id: v1(), title: 'HTML', isDone: true},
+            {id: v1(), title: 'CSS', isDone: true},
+            {id: v1(), title: 'TS/JS', isDone: false},
+            {id: v1(), title: 'REACT', isDone: false},
         ]
     )
+    console.log(tasks)
 
 
     // const todolistTitle_1 = "What to buy"
@@ -28,11 +30,18 @@ function App() {
 
     const [filter, setFilter] = useState<nameBtnFiltered> ('All')
 
-    const removeTask = (idTask: number) => {
+    const removeTask = (idTask: string) => {
         const removeTask = tasks.filter (task => {
             return task.id !== idTask
         })
         setTasks (removeTask)
+    }
+
+    const addTask = (title: string) => {
+        let newTask =  {id: v1(), title: title, isDone: false}
+        let addTask = [newTask, ...tasks]
+        setTasks(addTask)
+        console.log(addTask)
     }
 
     let filteredTask = tasks
@@ -49,6 +58,7 @@ function App() {
         setFilter (nameBtn)
     }
 
+    //при использовании хука useMemo
     const filtredTasksData = useMemo(() => {
         let filteredTask = tasks
         if (filter === 'Active') {
@@ -75,16 +85,16 @@ function App() {
     return (
         <div className="App">
 
-
             {/*const el = document. createelement("div")*/}
             {/*el.classList.add("App")*/}
             {/*root.append(el)*/}
 
-            <Todolist title={todolistTitle} tasks={filteredTask} removeTask={removeTask} filteredTask={changeFilteredTask}/>
-            {/*<Todolist title = {todolistTitle_1} tasks={tasks_1} />*/}
+            <Todolist title={todolistTitle}
+                      tasks={filteredTask}
+                      removeTask={removeTask}
+                      addTask = {addTask}
+                      filteredTask={changeFilteredTask}/>
 
-            {/*<Todolist title = "What to buy"/>*/}
-            {/*<Todolist title = "What to read"/>*/}
         </div>
     );
 }
