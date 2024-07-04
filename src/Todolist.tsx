@@ -31,7 +31,9 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask}: Todo
 
     const onClickHandlerRef = () => {
         if (inputRef.current) {
-            addTask (inputRef.current.value)
+            if(inputRef.current.value.length < 15){
+                addTask (inputRef.current.value)
+            }
             inputRef.current.value = ''
         }
 
@@ -72,9 +74,10 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask}: Todo
             <div>
                 <h3>{title}</h3>
                 <div>
-                    {/*<input value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>*/}
-                    <input ref={inputRef}/>
-                    <button onClick={onClickHandlerRef}>+</button>
+                    <input value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>
+                    {/*<input ref={inputRef}/>*/}
+                    <button onClick={onClickHandler} disabled={!Boolean(addNewTitle.trim())}>+</button>
+                    {addNewTitle.length > 15 && <div>Recommended task title is 15 charters</div>}
                 </div>
                 <span>{taskElements}</span>
                 <div>
