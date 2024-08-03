@@ -58,6 +58,17 @@ function App() {
         setFilter (nameBtn)
     }
 
+    const changeTaskStatus = (id: string, newChange: boolean) => {
+        // const task = tasks.find(el => el.id === id)
+        // if(task) {
+        //     task.isDone = newChange
+        //     setTasks([...tasks])
+        // }
+        //можно с помощью map
+        const newChangeTask = tasks.map( t => (t.id === id ? {...t, isDone: newChange}: t))
+        setTasks(newChangeTask)
+    }
+
     //при использовании хука useMemo
     const filtredTasksData = useMemo(() => {
         let filteredTask = tasks
@@ -93,7 +104,9 @@ function App() {
                       tasks={filteredTask}
                       removeTask={removeTask}
                       addTask = {addTask}
-                      filteredTask={changeFilteredTask}/>
+                      filteredTask={changeFilteredTask}
+                      changeTaskStatus = {changeTaskStatus}
+            />
 
         </div>
     );

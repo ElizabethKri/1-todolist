@@ -9,12 +9,13 @@ type TodolistPropsType = {
     removeTask: (idTask: string) => void
     filteredTask: (nameBtn: nameBtnFiltered) => void
     addTask: (title: string) => void
+    changeTaskStatus: (id: string, newChange: boolean) =>void
 
 }
 
 
 //регулярная функция
-export function Todolist({title, tasks, removeTask, filteredTask, addTask}: TodolistPropsType) {
+export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus}: TodolistPropsType) {
 
     const [addNewTitle, setAddNewTitle] = useState ('')
 
@@ -59,9 +60,16 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask}: Todo
                     removeTask (task.id)
                 }
 
+                const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                    const newChange = e.currentTarget.checked
+                    console.log(newChange)
+                    changeTaskStatus(task.id, newChange)
+
+                }
+
                 return (
                     <li key={task.id}>
-                        <input type="checkbox" checked={task.isDone}/>
+                        <input type="checkbox" checked={task.isDone} onChange={changeStatusHandler}/>
                         <span>{task.title}</span>
                         <button onClick={onClickRemoveTask} style={{marginLeft: '5px'}}>-</button>
                     </li>
