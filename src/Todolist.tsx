@@ -26,7 +26,8 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
     }
 
     const onClickHandler = () => {
-        addTask (addNewTitle)
+        if (addNewTitle.trim() !== '')
+        addTask (addNewTitle.trim())
         setAddNewTitle('')
     }
 
@@ -84,7 +85,9 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
                 <div>
                     <input value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>
                     {/*<input ref={inputRef}/>*/}
-                    <button onClick={onClickHandler} disabled={!Boolean(addNewTitle.trim())}>+</button>
+                    <button onClick={onClickHandler}
+                            disabled={!(addNewTitle.trim())}
+                    >+</button>
                     {addNewTitle.length > 15 && <div>Recommended task title is 15 charters</div>}
                 </div>
                 <span>{taskElements}</span>
