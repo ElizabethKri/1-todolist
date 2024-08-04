@@ -21,14 +21,21 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
 
     const inputRef = useRef<HTMLInputElement>(null)
 
+    const [error, setError] = useState<null | string>(null)
+
     const handlerOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         setAddNewTitle (e.currentTarget.value)
     }
 
     const onClickHandler = () => {
-        if (addNewTitle.trim() !== '')
-        addTask (addNewTitle.trim())
-        setAddNewTitle('')
+        if (addNewTitle.trim() !== '') {
+            addTask (addNewTitle.trim())
+            setAddNewTitle('')
+            setError(null)
+        }
+        else {
+            setError('Title is required')
+        }
     }
 
     const onClickHandlerRef = () => {
@@ -45,6 +52,7 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
             if (e.key === 'Enter') {
                addTask(addNewTitle)
                 setAddNewTitle('')
+                setError(null)
             }
     }
 
@@ -83,11 +91,12 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
             <div>
                 <h3>{title}</h3>
                 <div>
-                    <input value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>
+                    <input className={error ? "error": ""} value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>
                     {/*<input ref={inputRef}/>*/}
                     <button onClick={onClickHandler}
-                            disabled={!(addNewTitle.trim())}
+                            // disabled={!(addNewTitle.trim())}
                     >+</button>
+                    {error && <div className={"error-message"}>{error}</div>}
                     {addNewTitle.length > 15 && <div>Recommended task title is 15 charters</div>}
                 </div>
                 <span>{taskElements}</span>
