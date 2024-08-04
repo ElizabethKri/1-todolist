@@ -10,12 +10,13 @@ type TodolistPropsType = {
     filteredTask: (nameBtn: nameBtnFiltered) => void
     addTask: (title: string) => void
     changeTaskStatus: (id: string, newChange: boolean) =>void
+    filter: nameBtnFiltered
 
 }
 
 
 //регулярная функция
-export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus}: TodolistPropsType) {
+export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter}: TodolistPropsType) {
 
     const [addNewTitle, setAddNewTitle] = useState ('')
 
@@ -77,7 +78,7 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
                 }
 
                 return (
-                    <li key={task.id}>
+                    <li key={task.id} className={task.isDone ? "is-done" : ''}>
                         <input type="checkbox" checked={task.isDone} onChange={changeStatusHandler}/>
                         <span>{task.title}</span>
                         <button onClick={onClickRemoveTask} style={{marginLeft: '5px'}}>-</button>
@@ -101,9 +102,9 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
                 </div>
                 <span>{taskElements}</span>
                 <div>
-                    <button onClick={filteredTaskAll}>All</button>
-                    <button onClick={filteredTaskActive}> Active</button>
-                    <button onClick={filteredTaskCompleted}>Completed</button>
+                    <button className={filter === 'All'? 'active-filter' : ''} onClick={filteredTaskAll}>All</button>
+                    <button className={filter === 'Active'? 'active-filter' : ''} onClick={filteredTaskActive}> Active</button>
+                    <button className={filter === 'Completed'? 'active-filter' : ''} onClick={filteredTaskCompleted}>Completed</button>
                 </div>
             </div>
         </div>
