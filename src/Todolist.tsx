@@ -1,22 +1,24 @@
-import {TaskType} from './types/common';
-import {nameBtnFiltered} from './App';
+import {nameBtnFiltered, TaskType} from './App';
 import {ChangeEvent,  useRef, useState} from 'react';
 
 
 type TodolistPropsType = {
     title: string
-    tasks: Array<TaskType>
-    removeTask: (idTask: string) => void
-    filteredTask: (nameBtn: nameBtnFiltered) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (id: string, newChange: boolean) =>void
+    todolistId: string,
     filter: nameBtnFiltered
+    tasks: Array<TaskType>
+
+    removeTask: (idTask: string, todolistId: string) => void
+    filteredTask: (nameBtn: nameBtnFiltered, todolistId: string) => void
+    addTask: (title: string, todolistId: string) => void
+    changeTaskStatus: (id: string, newChange: boolean, todolistId: string) =>void
+    removeTodolist: (todolistId: string) => void
 
 }
 
 
 //регулярная функция
-export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter}: TodolistPropsType) {
+export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter, todolistId, removeTodolist}: TodolistPropsType) {
 
     const [addNewTitle, setAddNewTitle] = useState ('')
 
@@ -30,7 +32,7 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
 
     const onClickHandler = () => {
         if (addNewTitle.trim() !== '') {
-            addTask (addNewTitle.trim())
+            addTask (addNewTitle.trim(), todolistId)
             setAddNewTitle('')
             setError(null)
         }
@@ -42,7 +44,7 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
     const onClickHandlerRef = () => {
         if (inputRef.current) {
             if(inputRef.current.value.length < 15){
-                addTask (inputRef.current.value)
+                addTask (inputRef.current.value, todolistId)
             }
             inputRef.current.value = ''
         }
@@ -51,15 +53,15 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
 
     const handlerOnKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
             if (e.key === 'Enter') {
-               addTask(addNewTitle)
+               addTask(addNewTitle, todolistId)
                 setAddNewTitle('')
                 setError(null)
             }
     }
 
-    const filteredTaskAll = () => filteredTask ('All')
-    const filteredTaskActive = () => filteredTask ('Active')
-    const filteredTaskCompleted = () => filteredTask ('Completed')
+    const filteredTaskAll = () => filteredTask ('All', todolistId)
+    const filteredTaskActive = () => filteredTask ('Active', todolistId)
+    const filteredTaskCompleted = () => filteredTask ('Completed', todolistId)
 
 
     const taskElements: Array<JSX.Element> | JSX.Element =
@@ -67,13 +69,13 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
             ? tasks.map (task => {
 
                 const onClickRemoveTask = () =>{
-                    removeTask (task.id)
+                    removeTask (task.id, todolistId)
                 }
 
                 const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     const newChange = e.currentTarget.checked
                     console.log(newChange)
-                    changeTaskStatus(task.id, newChange)
+                    changeTaskStatus(task.id, newChange, todolistId)
 
                 }
 
@@ -90,7 +92,10 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
     return (
         <div className="todolist">
             <div>
-                <h3>{title}</h3>
+                <h3>
+                    {title}
+                    <button onClick={() => removeTodolist(todolistId)}>x</button>
+                </h3>
                 <div>
                     <input className={error ? "error": ""} value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>
                     {/*<input ref={inputRef}/>*/}
