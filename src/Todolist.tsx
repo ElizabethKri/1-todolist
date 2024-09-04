@@ -17,12 +17,13 @@ type TodolistPropsType = {
     removeTodolist: (todolistId: string) => void
     addTodolist: (title: string) => void
     updateTask: (todolistId: string, taskID: string ,newTitle: string) => void
+    updateTodolist: (todolistId: string, newTitle: string) => void
 
 }
 
 
 //регулярная функция
-export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter, todolistId, removeTodolist, updateTask}: TodolistPropsType) {
+export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter, todolistId, removeTodolist, updateTask, updateTodolist}: TodolistPropsType) {
 
 
 
@@ -42,6 +43,10 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
     const filteredTaskActive = () => filteredTask ('Active', todolistId)
     const filteredTaskCompleted = () => filteredTask ('Completed', todolistId)
 
+    //todo: починить функцию
+    const updateTaskHandler = (newTitle: string) => {
+        updateTask(todolistId, task.id, newTitle)
+    }
 
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0
@@ -58,9 +63,9 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
 
                 }
 
-                const updateTaskHandler = (newTitle: string) => {
-                    updateTask(todolistId, task.id, newTitle)
-                }
+                // const updateTaskHandler = (newTitle: string) => {
+                //     updateTask(todolistId, task.id, newTitle)
+                // }
 
                 return (
                     <li key={task.id} className={task.isDone ? "is-done" : ''}>
@@ -76,11 +81,15 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
         addTask(title, todolistId)
     }
 
+    const updateTodolistHandler = (title: string) => {
+        updateTodolist(todolistId, title)
+    }
+
     return (
         <div className="todolist">
             <div>
                 <h3>
-                    {title}
+                    <EditableSpan oldTitle={title} updateItem={updateTodolistHandler}/>
                     <button onClick={() => removeTodolist(todolistId)}>x</button>
                 </h3>
                 <AddItemForm addItem={addTaskHandler}/>
