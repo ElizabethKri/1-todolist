@@ -131,6 +131,12 @@ function App() {
 
     }
 
+    const updateTask = (todolistId: string, taskID: string ,title: string) => {
+        console.log(title)
+        setTasks({...tasks, [todolistId] : tasks[todolistId].map(el => el.id === taskID ? {...el, title} : el)})
+
+    }
+
     const todolistComp: Array<JSX.Element> = todolist.map(tl => {
 
         let filteredTask = tasks[tl.id]
@@ -155,6 +161,7 @@ function App() {
                 filter = {tl.filter}
                 removeTodolist ={removeTodolist}
                 addTodolist={addTodolist}
+                updateTask = {updateTask}
 
         />
 

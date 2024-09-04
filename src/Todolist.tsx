@@ -1,6 +1,7 @@
 import {nameBtnFiltered, TaskType} from './App';
 import {ChangeEvent,  useRef, useState} from 'react';
 import AddItemForm from './AddItemForm';
+import EditableSpan from './EditableSpan';
 
 
 type TodolistPropsType = {
@@ -15,12 +16,13 @@ type TodolistPropsType = {
     changeTaskStatus: (id: string, newChange: boolean, todolistId: string) =>void
     removeTodolist: (todolistId: string) => void
     addTodolist: (title: string) => void
+    updateTask: (todolistId: string, taskID: string ,newTitle: string) => void
 
 }
 
 
 //регулярная функция
-export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter, todolistId, removeTodolist}: TodolistPropsType) {
+export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter, todolistId, removeTodolist, updateTask}: TodolistPropsType) {
 
 
 
@@ -56,10 +58,14 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
 
                 }
 
+                const updateTaskHandler = (newTitle: string) => {
+                    updateTask(todolistId, task.id, newTitle)
+                }
+
                 return (
                     <li key={task.id} className={task.isDone ? "is-done" : ''}>
                         <input type="checkbox" checked={task.isDone} onChange={changeStatusHandler}/>
-                        <span>{task.title}</span>
+                        <EditableSpan oldTitle={task.title} updateItem ={updateTaskHandler}/>
                         <button onClick={onClickRemoveTask} style={{marginLeft: '5px'}}>-</button>
                     </li>
                 )
