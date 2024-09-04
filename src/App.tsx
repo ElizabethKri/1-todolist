@@ -2,6 +2,7 @@ import React, {useMemo, useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
+import AddItemForm from './AddItemForm';
 
 export type nameBtnFiltered = 'All' | 'Active' | 'Completed'
 
@@ -122,6 +123,14 @@ function App() {
         delete tasks[todolistId]
     }
 
+    const addTodolist = (title: string) => {
+        const newId = v1()
+        const newTodo: TodolistType = {id: newId, title, filter: 'All'}
+        setTodolist([newTodo,...todolist])
+        setTasks({ [newId]: [], ...tasks})
+
+    }
+
     const todolistComp: Array<JSX.Element> = todolist.map(tl => {
 
         let filteredTask = tasks[tl.id]
@@ -145,8 +154,11 @@ function App() {
                 changeTaskStatus = {changeTaskStatus}
                 filter = {tl.filter}
                 removeTodolist ={removeTodolist}
+                addTodolist={addTodolist}
 
-        />)
+        />
+
+        )
     })
 
     // //при использовании хука useMemo
@@ -173,8 +185,10 @@ function App() {
     //         return filteredTask
     // }
 
+
     return (
         <div className="App">
+            <AddItemForm addItem={addTodolist}/>
 
             {/*const el = document. createelement("div")*/}
             {/*el.classList.add("App")*/}

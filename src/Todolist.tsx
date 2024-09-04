@@ -1,5 +1,6 @@
 import {nameBtnFiltered, TaskType} from './App';
 import {ChangeEvent,  useRef, useState} from 'react';
+import AddItemForm from './AddItemForm';
 
 
 type TodolistPropsType = {
@@ -13,6 +14,7 @@ type TodolistPropsType = {
     addTask: (title: string, todolistId: string) => void
     changeTaskStatus: (id: string, newChange: boolean, todolistId: string) =>void
     removeTodolist: (todolistId: string) => void
+    addTodolist: (title: string) => void
 
 }
 
@@ -20,26 +22,9 @@ type TodolistPropsType = {
 //регулярная функция
 export function Todolist({title, tasks, removeTask, filteredTask, addTask, changeTaskStatus, filter, todolistId, removeTodolist}: TodolistPropsType) {
 
-    const [addNewTitle, setAddNewTitle] = useState ('')
+
 
     const inputRef = useRef<HTMLInputElement>(null)
-
-    const [error, setError] = useState<null | string>(null)
-
-    const handlerOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setAddNewTitle (e.currentTarget.value)
-    }
-
-    const onClickHandler = () => {
-        if (addNewTitle.trim() !== '') {
-            addTask (addNewTitle.trim(), todolistId)
-            setAddNewTitle('')
-            setError(null)
-        }
-        else {
-            setError('Title is required')
-        }
-    }
 
     const onClickHandlerRef = () => {
         if (inputRef.current) {
@@ -49,14 +34,6 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
             inputRef.current.value = ''
         }
 
-    }
-
-    const handlerOnKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-            if (e.key === 'Enter') {
-               addTask(addNewTitle, todolistId)
-                setAddNewTitle('')
-                setError(null)
-            }
     }
 
     const filteredTaskAll = () => filteredTask ('All', todolistId)
@@ -89,6 +66,10 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
             })
             : <span>Your taskslist is empty </span>
 
+    const addTaskHandler = (title: string) =>{
+        addTask(title, todolistId)
+    }
+
     return (
         <div className="todolist">
             <div>
@@ -96,15 +77,7 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
                     {title}
                     <button onClick={() => removeTodolist(todolistId)}>x</button>
                 </h3>
-                <div>
-                    <input className={error ? "error": ""} value={addNewTitle} onChange={handlerOnChange} onKeyDown={handlerOnKeyDown}/>
-                    {/*<input ref={inputRef}/>*/}
-                    <button onClick={onClickHandler}
-                            // disabled={!(addNewTitle.trim())}
-                    >+</button>
-                    {error && <div className={"error-message"}>{error}</div>}
-                    {addNewTitle.length > 15 && <div>Recommended task title is 15 charters</div>}
-                </div>
+                <AddItemForm addItem={addTaskHandler}/>
                 <span>{taskElements}</span>
                 <div>
                     <button className={filter === 'All'? 'active-filter' : ''} onClick={filteredTaskAll}>All</button>
