@@ -3,6 +3,16 @@ import {ChangeEvent,  useRef, useState} from 'react';
 import AddItemForm from './AddItemForm';
 import EditableSpan from './EditableSpan';
 import Tasks from './Tasks';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import Box from '@mui/material/Box';
+import {filterButtonsContainersSx} from './types/Todolist.style';
+
+
+
+
 
 
 type TodolistPropsType = {
@@ -79,7 +89,7 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
 
     const taskElements: Array<JSX.Element> | JSX.Element =
         tasks.length !== 0
-            ? <ul>{mappedTasks}</ul>
+            ? <List>{mappedTasks}</List>
             : <span>Your taskslist is empty </span>
 
     const addTaskHandler = (title: string) =>{
@@ -95,15 +105,17 @@ export function Todolist({title, tasks, removeTask, filteredTask, addTask, chang
             <div>
                 <h3>
                     <EditableSpan oldTitle={title} updateItem={updateTodolistHandler}/>
-                    <button onClick={() => removeTodolist(todolistId)}>x</button>
+                    <IconButton aria-label={'delete'} onClick={() => removeTodolist(todolistId)}>
+                        <DeleteIcon fontSize={'inherit'}></DeleteIcon>
+                    </IconButton>
                 </h3>
                 <AddItemForm addItem={addTaskHandler}/>
                 <span>{taskElements}</span>
-                <div>
-                    <button className={filter === 'All'? 'active-filter' : ''} onClick={filteredTaskAll}>All</button>
-                    <button className={filter === 'Active'? 'active-filter' : ''} onClick={filteredTaskActive}> Active</button>
-                    <button className={filter === 'Completed'? 'active-filter' : ''} onClick={filteredTaskCompleted}>Completed</button>
-                </div>
+                <Box sx = {filterButtonsContainersSx}>
+                    <Button variant={filter === 'All'? 'contained' : 'outlined'} color={'warning'} onClick={filteredTaskAll}>All</Button>
+                    <Button variant={filter === 'Active'? 'contained' : 'outlined'} color={'primary'} onClick={filteredTaskActive}> Active</Button>
+                    <Button variant={filter === 'Completed'? 'contained' : 'outlined'} color={'secondary'} onClick={filteredTaskCompleted}>Completed</Button>
+                </Box>
             </div>
         </div>
     )

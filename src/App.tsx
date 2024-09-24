@@ -3,6 +3,9 @@ import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import AddItemForm from './AddItemForm';
+import ButtonAppBar from './ButtonAppBar';
+import {Container, createTheme, CssBaseline, Grid, ThemeProvider} from '@mui/material';
+import Paper from '@mui/material/Paper';
 
 export type nameBtnFiltered = 'All' | 'Active' | 'Completed'
 
@@ -26,11 +29,15 @@ type TasksStateType = {
     [todolistId: string] : TaskType[]
 }
 
+type ThemeMode = 'dark' | 'light'
+
+
 const todolist_1 = v1();
 const todolist_2 = v1();
 
 
 function App() {
+
 
     const [todolist, setTodolist] = useState<Array<TodolistType>>(
         [{
@@ -141,6 +148,7 @@ function App() {
         setTodolist(todolist.map(el => el.id === todolistId ? {...el, title} :el))
     }
 
+
     const todolistComp: Array<JSX.Element> = todolist.map(tl => {
 
         let filteredTask = tasks[tl.id]
@@ -150,8 +158,8 @@ function App() {
         if (tl.filter === 'Completed') {
             filteredTask = filteredTask.filter (task => task.isDone)
         }
-
         return (
+            <Paper elevation={3} sx ={{ p: '15px', m: '20px'}}>
             <Todolist
                 key ={tl.id}
                 title={tl.title}
@@ -169,6 +177,7 @@ function App() {
                 updateTodolist = {updateTodolist}
 
         />
+        </Paper>
 
         )
     })
@@ -197,18 +206,42 @@ function App() {
     //         return filteredTask
     // }
 
+    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+
+    const theme = createTheme(({
+        palette: {
+            mode: themeMode === 'light' ? 'light' : 'dark',
+            primary: {
+                main: '#0fa685',
+
+            }
+        }
+
+    }))
+
+    const changeModeHandler = () => {
+        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+    }
 
     return (
         <div className="App">
+            <ThemeProvider  theme = {theme}>
+            <CssBaseline/>
+            <Container fixed>
+            <ButtonAppBar changeModeHandler = {changeModeHandler}/>
+            <Grid container sx ={{ m: '20px'}}>
             <AddItemForm addItem={addTodolist}/>
+            </Grid>
 
             {/*const el = document. createelement("div")*/}
             {/*el.classList.add("App")*/}
             {/*root.append(el)*/}
 
+            <Grid container>
             {todolistComp}
-
-
+            </Grid>
+            </Container>
+            </ThemeProvider>
         </div>
     );
 }

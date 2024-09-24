@@ -1,4 +1,6 @@
 import {ChangeEvent, useState} from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 type Props = {
     addItem: (title: string) => void
@@ -31,19 +33,35 @@ const AddItemForm = ({addItem}: Props) => {
         }
     }
 
+    const buttonStyles = {
+        maxWidth: '38px',
+        maxHeight: '38px',
+        minHeight: '38px',
+        background: 'primary'
+    }
 
     return (
         <div>
-            <input className={error ? "error" : ""}
-                   value={addNewTitle}
-                   onChange={handlerOnChange}
-                   onKeyDown={handlerOnKeyDown}/>
+            <TextField
+                id={'outlined-basic'}
+                size={'small'}
+                label={error ? error:'Write the title'}
+                variant={'outlined'}
+                error={!!error}
+                className={error ? 'error' : ''}
+                value={addNewTitle}
+                onChange={handlerOnChange}
+                onKeyDown={handlerOnKeyDown}/>
             {/*<input ref={inputRef}/>*/}
-            <button onClick={AddItemHandler}
+
+            <Button variant="contained"
+                    size={'small'}
+                    style={buttonStyles}
+                    onClick={AddItemHandler}
                 // disabled={!(addNewTitle.trim())}
             >+
-            </button>
-            {error && <div className={"error-message"}>{error}</div>}
+            </Button>
+            {/*{error && <div className={"error-message"}>{error}</div>}*/}
             {addNewTitle.length > 15 && <div>Recommended task title is 15 charters</div>}
         </div>
     );
